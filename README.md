@@ -1,7 +1,7 @@
 # Frontend - Forum Sample Application Laravel | Vue | Nuxt
 
 ## Included
-- Frontend: Vue Nuxt <img src="https://img.shields.io/badge/Nuxt-3-green"> <img src="https://img.shields.io/badge/Vue-3-brightgreen">
+- Frontend: Vue Nuxt Vuetify <img src="https://img.shields.io/badge/Nuxt-3-green"> <img src="https://img.shields.io/badge/Vue-3-brightgreen"> <img src="https://img.shields.io/badge/Vuetify-9-blue">
 - Backend: Laravel 9 <img src="https://img.shields.io/badge/Laravel-9-red">
 
 ## API Documentation
