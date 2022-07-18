@@ -118,12 +118,12 @@
 <script>
 export default {
   data: () => ({
-    links: [
-      { title: 'Home', to: '/' },
-      { title: 'Dashboard', to: '/' },
-      { title: 'Posts', to: '/post-dashboard' },
-      { title: 'Profile', to: '/' },
-      { title: 'Updates', to: '/' },
+    menu: [
+      { title: 'Home', to: '/', restricted: false },
+      { title: 'Dashboard', to: '/', restricted: false },
+      { title: 'Posts', to: '/post-dashboard', restricted: true},
+      { title: 'Profile', to: '/', restricted: false },
+      { title: 'Updates', to: '/', restricted: false },
     ],
     showMenu: false,
     selectedItem: 0,
@@ -173,6 +173,14 @@ export default {
     },
     email() {
       return this.$store.getters['access/user/getUser'].email;
+    },
+    links() {
+      if(this.$store.getters['access/user/getUser'].role_id == '2') {
+        return this.menu.filter(function (item) {
+          return !item.restricted;
+        });
+      }
+      return this.menu;
     }
   },
   created() {

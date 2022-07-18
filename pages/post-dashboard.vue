@@ -3,9 +3,10 @@
     <v-data-table
       :headers="columns"
       :items="posts"
-      :page.sync="page"
+      :options.sync="options"
       sort-by="calories"
       class="elevation-1"
+      :server-items-length="length"
     >
       <template v-slot:top>
         <v-toolbar
@@ -94,6 +95,22 @@
         </v-btn>
       </template>
     </v-data-table>
+    <v-snackbar
+      v-model="snackbar"
+    >
+      {{ message }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="pink"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
 
   </BreezeAuthenticatedLayout>
 </template>
@@ -113,7 +130,7 @@ export default {
     dialogDelete: false,
     approveDialog: false,
     posts: [],
-    page: 1,
+    options: {},
     columns: [
       {
         text: 'Title',
@@ -134,21 +151,29 @@ export default {
         value: 'created_at',
       },
       { text: 'Actions', value: 'actions', sortable: false },
-    ]
+    ],
+    snackbar: false,
+    message: '',
+    post: {}
   }),
 
   methods: {
     async fetchPosts() {
-      let response = await this.$axios.$get(`/api/v1/posts/all?page=${this.page}&per_page=6`);
+      let response = await this.$axios.$get(`/api/v1/posts/all?page=${this.options.page}&per_page=6`);
       this.length = response.DATA.last_page;
       this.posts = response.DATA.data;
     },
     approveConfirm(item) {
       this.approveDialog = true;
+      this.post = item;
     },
-    async approvePost(post) {
-      if (post.id) {
-        let response = await this.$axios.$post('/api/v1/posts/approve', { id: post.id });
+    async approvePost() {
+      console.log(this.post);
+      if (this.post.id) {
+        let response = await this.$axios.$post('/api/v1/posts/approve', { id: this.post.id });
+        this.message = response.MESSAGE;
+        this.snackbar = true;
+        this.approveDialog = false;
       }
     },
     deleteItem() {
@@ -171,7 +196,16 @@ export default {
 
   mounted() {
     this.fetchPosts();
-  }
+  },
+
+  watch: {
+    options: {
+      handler () {
+        this.fetchPosts();
+      },
+      deep: true
+    },
+  },
 }
 </script>
 

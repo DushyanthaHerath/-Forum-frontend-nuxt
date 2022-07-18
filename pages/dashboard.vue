@@ -173,6 +173,22 @@
         </v-list>
       </v-card>
     </v-dialog>
+    <v-snackbar
+      v-model="snackbar"
+    >
+      {{ message }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="pink"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </BreezeAuthenticatedLayout>
 </template>
 
@@ -198,6 +214,8 @@ export default {
       v => !!v || 'Content is required'
     ],
     notifications: '',
+    snackbar: false,
+    message: '',
     categories: []
   }),
 
@@ -236,7 +254,16 @@ export default {
     async save() {
       let valid = await this.$refs.form.validate();
       if (valid) {
-        let response = await this.$axios.$post('/api/v1/posts/save', this.form);
+        try {
+          let response = await this.$axios.$post('/api/v1/posts/save', this.form);
+          this.message = response.MESSAGE;
+          this.snackbar = true;
+          this.dialog=false;
+        } catch (e) {
+          this.message = e.message;
+          this.snackbar = true;
+          this.dialog=false;
+        }
       }
     },
     async getCategories() {
