@@ -1,0 +1,26 @@
+#inspire {
+  .inspire-background {
+    background-image: url("~/assets/images/light.jpg");
+
+    /* Full height */
+    height: 100%;
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .box-title {
+    max-width: 600px;
+  }
+}
+
+#inspire-login {
+  .login-form {
+    width: 450px;
+    height: 320px;
+  }
+  .login-space {
+    background-color: #ffff;
+  }
+}
